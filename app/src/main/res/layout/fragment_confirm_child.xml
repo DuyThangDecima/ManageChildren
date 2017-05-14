@@ -1,0 +1,119 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroud_body"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="com.thangld.managechildren.main.child.ConfirmChildFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:paddingTop="30dp"
+        android:text="@string/title_confirm_phone_child"
+        android:textColor="@color/text_dark_app"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/content_confirm_your_child"
+        android:textColor="@color/text_dark_app"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:drawableLeft="@drawable/ticked"
+        android:drawablePadding="16dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/monitor_time_use"
+        android:textColor="@color/text_dark_app"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:drawableLeft="@drawable/ticked"
+        android:drawablePadding="16dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/monitor_block_app"
+        android:textColor="@color/text_dark_app"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:drawableLeft="@drawable/ticked"
+        android:drawablePadding="16dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/monitor_location"
+        android:textColor="@color/text_dark_app"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:drawableLeft="@drawable/ticked"
+        android:drawablePadding="16dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/monitor_sms"
+        android:textColor="@color/text_dark_app"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:drawableLeft="@drawable/ticked"
+        android:drawablePadding="16dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/monitor_media"
+        android:textColor="@color/text_dark_app"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:drawableLeft="@drawable/ticked"
+        android:drawablePadding="16dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/monitor_calllog"
+        android:textColor="@color/text_dark_app"
+        android:textSize="16sp" />
+
+    <Button
+        android:layout_gravity="center"
+        android:id="@+id/btn_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/loginbutton_selector"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="@string/continue_btn"
+        android:textColor="@color/white_greyish"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+
+</LinearLayout>

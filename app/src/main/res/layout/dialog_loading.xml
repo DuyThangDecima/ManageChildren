@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toast_root"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:padding="5dp">
+
+    <TextView
+        android:layout_marginLeft="72dp"
+        android:id="@+id/msg"
+        android:layout_width="fill_parent"
+        android:layout_height="72dp"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+    <com.wang.avi.AVLoadingIndicatorView
+        android:layout_margin="16dp"
+        app:indicatorColor="@color/background_color"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        app:indicatorName="LineSpinFadeLoaderIndicator" />
+
+</RelativeLayout>

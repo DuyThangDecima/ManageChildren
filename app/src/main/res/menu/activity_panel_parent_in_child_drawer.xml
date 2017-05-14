@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/nv_group"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_rules"
+            android:icon="@drawable/rules"
+            android:title="@string/rules" />
+
+        <item
+            android:id="@+id/nav_information"
+            android:icon="@drawable/information"
+            android:title="@string/information" />
+        <item
+            android:id="@+id/nav_change_child"
+            android:icon="@drawable/change_child"
+            android:title="@string/change_child" />
+        <item
+            android:id="@+id/nav_uninstall"
+            android:icon="@drawable/uninstall"
+            android:title="@string/uninstall" />
+
+    </group>
+
+</menu>

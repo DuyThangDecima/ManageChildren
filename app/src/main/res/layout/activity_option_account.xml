@@ -1,0 +1,168 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ThemeOverlay.AppCompat.Light"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/backgroud_body">
+
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/background_color"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:titleTextColor="@color/white"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    <ScrollView
+        android:fillViewport="true"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/login_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:height="72dp"
+                android:gravity="center"
+                android:text="@string/who_device"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:id="@+id/layout_child"
+                android:layout_width="match_parent"
+                android:layout_height="92dp"
+                android:background="@drawable/option_account_selector"
+                android:clickable="true">
+
+                <ImageView
+                    android:id="@+id/child_icon"
+                    android:layout_width="92dp"
+                    android:layout_height="92dp"
+                    android:layout_centerVertical="true"
+                    android:padding="16dp"
+                    android:src="@drawable/child" />
+
+                <CheckBox
+                    android:id="@+id/belong_child"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:buttonTint="@color/background_color"
+                    android:clickable="false" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="92dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/belong_child"
+                    android:layout_toRightOf="@+id/child_icon"
+                    android:orientation="vertical"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/child"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:text="@string/belong_child"
+                        android:textSize="15sp" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_parent"
+                android:layout_width="match_parent"
+                android:layout_height="92dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/option_account_selector"
+                android:clickable="true">
+
+                <ImageView
+                    android:id="@+id/parent_icon"
+                    android:layout_width="92dp"
+                    android:layout_height="92dp"
+                    android:layout_centerVertical="true"
+                    android:padding="16dp"
+                    android:src="@drawable/parent" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="92dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/parent_icon"
+                    android:orientation="vertical"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/parent"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:text="@string/belong_parent"
+                        android:textSize="15sp" />
+
+                </RelativeLayout>
+
+                <CheckBox
+                    android:id="@+id/belong_parent"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:buttonTint="@color/background_color"
+                    android:clickable="false" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/continueBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/loginbutton_selector"
+                android:enabled="false"
+                android:gravity="center"
+                android:text="@string/continue_btn"
+                android:textColor="@color/white_greyish"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

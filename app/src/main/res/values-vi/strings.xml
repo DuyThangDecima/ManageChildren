@@ -1,0 +1,144 @@
+<resources>
+    <string name="app_name">Quản lý trẻ em</string>
+    <string name="action_settings">Cài đặt</string>
+    <string name="email">Email</string>
+    <string name="passowrd">Mật khẩu</string>
+    <string name="passowrd_incorrect">Mật khẩu dkhông đúng</string>
+    <string name="login">ĐĂNG NHẬP</string>
+    <string name="login_nomarl">Đăng nhập</string>
+    <string name="forgot">Quên mật khẩu?</string>
+    <string name="newUser">Chưa có tài khoản? Đăng ký tại đây.</string>
+    <string name="fullName">Họ tên</string>
+    <string name="mobileNumber">Số điện thoại</string>
+    <string name="location">Vị trí</string>
+    <string name="confirmPassword">Nhập lại mật khẩu</string>
+    <string name="terms_conditions">Khi đăng ký là bạn đã đồng ý với các Điều khoản.</string>
+    <string name="signUp">ĐĂNG KÝ</string>
+    <string name="sign_up_title">Đăng ký</string>
+    <string name="birth">Sinh năm</string>
+    <string name="already_user">Đã có tài khoản? Đăng nhập.</string>
+    <string name="registered_emailid">Hãy nhập email đã đăng ký:</string>
+    <string name="submit">XÁC NHẬN</string>
+    <string name="back">QUAY LẠI</string>
+    <string name="continue_btn">TIẾP TỤC</string>
+    <string name="who">Ai?</string>
+    <string name="all_field_required">Hãy điền đầy đủ thông tin.</string>
+    <string name="minimum_required_password">Mật khẩu ít nhất 8 ký tự.</string>
+    <string name="confirm_password_not_match">Mật khẩu xác nhận không trùng khớp.</string>
+    <string name="email_invalid">Email không hợp lệ.</string>
+    <string name="select_terms_conditions">Hãy chấp nhận các điều khoản.</string>
+    <string name="enter_email_password">Nhập đầy đủ email và mật khẩu.</string>
+    <string name="register_success">Đăng ký tài khoản thành công.</string>
+    <string name="same_account">Lưu ý: Cha mẹ và trẻ con dùng chung một tài khoản.</string>
+    <string name="session_expired_login_again">Phiên làm việc đã hết hạn, đăng nhập lại</string>
+
+    <string name="ok">Đồng ý</string>
+    <string name="re_try">Thử lại</string>
+    <string name="cancel">Huỷ</string>
+    <string name="email_already_registered">Email này đã đăng ký tài khoản trước đó.</string>
+
+    <string name="user_password_incorrect">Tài khoản hoặc mật khẩu không đúng.</string>
+    <string name="error_try_again">Đã có lỗi xảy ra, thử lại.</string>
+
+    <string name="child">Con cái</string>
+    <string name="parent">Cha mẹ</string>
+    <string name="who_device">Thiết bị này là của ai?</string>
+    <string name="belong_parent">Thiết bị của cha mẹ</string>
+    <string name="belong_child">Thiết bị của con bạn</string>
+
+    <string name="title_add_child_form">Thêm trẻ em</string>
+    <string name="child_exist">Tên trẻ con này đã tồn tại</string>
+
+    <string name="add_child_title">Con của bạn</string>
+    <string name="add_child">Hãy thêm trẻ con mà bạn muốn quản lý</string>
+
+    <string name="no_internet">Không có kết nối</string>
+    <string name="logout_other">Hệ thống sẽ đăng xuất tài khoản trẻ con này trên các thiết bị đăng nhập trước đó
+    </string>
+
+
+
+    <string name="sms">Tin nhắn</string>
+    <string name="contact">Danh bạ</string>
+    <string name="location_trace">Vị trí</string>
+    <string name="calllog">Cuộc gọi</string>
+    <string name="application">Ứng dụng</string>
+    <string name="media">Media</string>
+    <string name="photo">Ảnh</string>
+    <string name="audio">Audio</string>
+    <string name="video">Video</string>
+    <string name="setting">Cài đặt</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="performing_data_sync">Đang thực hiện đồng bộ</string>
+
+    <!--Navigation parent in child device-->
+    <string name="rules">Thiết lập</string>
+    <string name="change_child">Đổi trẻ con</string>
+    <string name="information">Thông tin</string>
+    <string name="uninstall">Gỡ cài đặt</string>
+
+
+
+    <string name="grant_accessibility">
+        Để bảo vệ con bạn, hãy cho phép truy cập vào "Khả năng truy cập"\n
+        Cho phép theo các bước sau:\n
+        Bước 1: Sau khi click TIẾP TỤC,ở màn hình tiếp tìm và chọn Quản lý trẻ em\n
+        Bước 2: Chọn cho phép rồi ấn quay lại\n
+    </string>
+
+    <string name="enable_uninstall">
+        Để kích hoạt tính năng chống gỡ bỏ:\n
+        Sau khi ấn TIẾP TỤC, chọn Kích hoạt.
+    </string>
+
+    <string name="no_device">Tài khoản này không có thiết bị\n
+        Hãy cài đặt ứng dụng này trên thiết bị trẻ con và kích hoạt tài khoản.
+    </string>
+
+    <string name="msg_ban_app">
+        Ứng dụng %1$s không được phép sử dụng
+    </string>
+    <string name="msg_limit_use">
+        Bạn chỉ được giải trí %1$s trên 1 ngày
+    </string>
+    <string name="minute">phút</string>
+    <string name="hours">giờ</string>
+
+    <string name="create_password">Tạo mật khẩu</string>
+    <string name="confirm_password">Xác nhận mật khẩu</string>
+    <string name="require_password">Nhập mật khẩu</string>
+    <string name="enter_password">Hãy nhập mật khẩu</string>
+    <string name="min_4_characters">Mật khẩu ít nhất 4 ký tự.</string>
+    <string name="create_password_success">Tạo mật khẩu thành công.</string>
+
+    <!--Confirm it's phone your child-->
+    <string name="title_confirm_phone_child">Điện thoại này thuộc về con bạn?</string>
+    <string name="content_confirm_your_child">Ứng dụng này sẽ giám sát con bạn bao gồm:</string>
+    <string name="monitor_time_use">Giới hạn thời gian sử dụng</string>
+    <string name="monitor_block_app">Không cho sử dụng app không mong muốn</string>
+    <string name="monitor_sms">Quản lý sms</string>
+    <string name="monitor_location">Quản lý vị trí</string>
+    <string name="monitor_calllog">Quản lý nhật ký cuộc gọi</string>
+    <string name="monitor_media">Quản lý Ảnh, Video, Audio</string>
+    <string name="monitor_contact">Quản lý danh bạ</string>
+
+    <!--Accessibility-->
+    <string name="accessibility_description">Hãy bật để tiếp tục</string>
+
+    <!--In rule-->
+    <string name="set_time_use">Cài đặt thời gian sử dụng(1 ngày)</string>
+    <string name="go_settings">Nhập mật khẩu để vào cài đặt</string>
+
+    <!--Cacs loai app-->
+    <string name="time_app">Ứng dụng giới hạn thời gian</string>
+    <string name="ban_app">Ứng dụng cấm sử dụng</string>
+    <string name="normal_app">Ứng dụng bình thường</string>
+
+    <string name="confirm_exit">Ấn quay lại để thoát chương trình</string>
+
+    <string name="unknown_location">Không xác định được</string>
+    <string name="retrieving_location">Đang lấy vị trí hiện tại của con bạn</string>
+    <string name="current_location">Con bạn đang ở %1$s, mở trên ứng dụng bản đồ</string>
+
+    <string name="grant_permission_to_continue">Cho phép các quyền để tiếp tục</string>
+</resources>

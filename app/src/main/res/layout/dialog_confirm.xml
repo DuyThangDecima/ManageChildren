@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toast_root"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_greyish_light">
+
+
+    <!--<TextView-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:id="@+id/title"-->
+        <!--android:text="Confirm"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:drawablePadding="10dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:padding="20px"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:textSize="15sp" />-->
+
+
+    <TextView
+
+        android:layout_below="@id/title"
+        android:id="@+id/msg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:padding="50px"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <LinearLayout
+
+        android:layout_below="@id/msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:background="@color/white"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:id="@+id/cancel"
+            android:text="@string/cancel"
+            android:layout_below="@id/msg"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Button>
+        <Button
+            android:background="@color/white"
+            android:layout_weight="1"
+            android:id="@+id/ok"
+            android:text="@string/ok"
+            android:layout_below="@id/msg"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Button>
+    </LinearLayout>
+
+
+</RelativeLayout>

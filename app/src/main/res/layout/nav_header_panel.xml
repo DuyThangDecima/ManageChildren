@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@color/background_color"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+
+
+    android:paddingRight="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <!--Thông tin tài khoản phụ, nếu có-->
+    <ImageView
+        android:visibility="invisible"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/avatar_extra"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+
+        android:background="@drawable/circle_image"
+        app:srcCompat="@drawable/child" />
+
+    <TextView
+        android:id="@+id/name_extra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/avatar_extra"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:maxWidth="100dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <ImageView
+        android:id="@+id/avatar_active"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/name_active"
+        android:background="@drawable/circle_image"
+        app:srcCompat="@drawable/child" />
+
+    <!--Thong tin cua tài khoản đang được chọn-->
+    <ImageButton
+        android:id="@+id/redirection_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/arrow_down"
+        android:layout_alignTop="@+id/name_active" />
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:id="@+id/name_active"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Duy Kien" />
+
+</RelativeLayout>
