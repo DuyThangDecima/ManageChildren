@@ -7,6 +7,13 @@ package com.thangld.managechildren.entry;
 public class ChildEntry {
     private String fullName;
     private int birth;
+
+    /**
+     * isActive = 1 => Đang được active
+     * isActive = 0 => Không đc active, đang ở vị trí 3,4,5,6...
+     * isActive = -1 => Không đc active, được set là extra account trên màn hình
+     */
+
     private int isActive;
     private String idServer;
 

@@ -178,11 +178,12 @@ public class ChildModel {
             );
         }
 
-        public static void insertChild(Context context, String childId, String fullName, int birth) {
+        public static void insertChild(Context context, String childId, String fullName, int birth, int activeStatus) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(Contents.ID_SERVER, childId);
             contentValues.put(Contents.FULL_NAME, fullName);
             contentValues.put(Contents.BIRTH, birth);
+            contentValues.put(Contents.ACTIVE, activeStatus);
             context.getContentResolver().insert(
                     ChildModel.Contents.CONTENT_URI,
                     contentValues

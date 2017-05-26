@@ -17,12 +17,19 @@ public class NetworkConnectionReceiver extends BroadcastReceiver {
         NetworkInfo netInfo = conMan.getActiveNetworkInfo();
         if (netInfo != null && netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
             Log.d("WifiReceiver", "Have Wifi Connection");
-            String privilege = new PreferencesController(context).getPrivilege();
-            if (privilege.equals(PreferencesController.PRIVILEGE_CHILD)) {
+            PreferencesController preferencesController =   new PreferencesController(context);
+            int privilege = preferencesController.getPrivilege();
+            if (privilege == PreferencesController.PRIVILEGE_CHILD) {
                 // Nếu là trẻ con, thực hiện upload.
                 TransferService.startActionUpload(context, TransferService.UPLOAD_ALL);
-            } else if (privilege.equals(PreferencesController.PRIVILEGE_CHILD)) {
+                if(preferencesController.getRequestDownload()){
+                    TransferService.startActionDownload(context,TransferService.DOWNLOAD_RULE_PARENT);
+                }
+
+            } else if (privilege == PreferencesController.PRIVILEGE_PARENT) {
                 // Nếu là bố mẹ, kiểm tra download.
+
+
             }
         } else {
             Log.d("WifiReceiver", "Don't have Wifi Connection");

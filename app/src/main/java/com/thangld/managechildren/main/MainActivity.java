@@ -11,7 +11,6 @@ import com.thangld.managechildren.storage.controller.PreferencesController;
 
 public class MainActivity extends AppCompatActivity {
 
-
     DatabaseHelper mDbHelper;
 
     @Override
@@ -25,15 +24,15 @@ public class MainActivity extends AppCompatActivity {
         PreferencesController preferencesController = new PreferencesController(this);
         boolean is_login = preferencesController.getStatusLogin();
         if (is_login) {
-            String privilege = preferencesController.getPrivilege();
-            if (privilege.equals(PreferencesController.PRIVILEGE_PARENT)) {
+            int privilege = preferencesController.getPrivilege();
+            if (PreferencesController.PRIVILEGE_PARENT == privilege) {
                 Intent intent = new Intent(this, PanelActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
 
                 // Đến giao diện của bố mẹ
-            } else if (privilege.equals(PreferencesController.PRIVILEGE_CHILD)) {
+            } else if (privilege == PreferencesController.PRIVILEGE_CHILD) {
                 // Hiển thị chào child, yêu cầu nhập mật khẩu
 
                 // Hiển thị options tùy chọn kiểu tài khoản
@@ -57,9 +56,5 @@ public class MainActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
-
-//        Intent intent = new Intent(this, ListChildActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        startActivity(intent);
     }
 }

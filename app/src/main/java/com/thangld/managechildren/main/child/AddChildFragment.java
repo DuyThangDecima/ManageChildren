@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -222,15 +223,16 @@ public class AddChildFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(context, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             } else {
                 try {
+                    Log.d("mc_log","respond " + s);
                     JSONObject json = new JSONObject(s);
+
                     int status = json.getInt(UrlPattern.STATUS_KEY);
                     if (status == UrlPattern.STATUS_SUCCESS) {
                         // phải gửi về child_id,
                         String id_server = json.getString(UrlPattern.CHILD_ID_KEY);
                         String full_name = json.getString(UrlPattern.FULL_NAME_KEY);
                         int birth = json.getInt(UrlPattern.BIRTH_KEY);
-                        ChildModel.QueryHelper.insertChild(mActivity, id_server, full_name, birth);
-
+                        ChildModel.QueryHelper.insertChild(mActivity, id_server, full_name, birth, ChildModel.Contents.ACTIVE_TRUE);
                         ((ListChildActivity) getActivity()).addListChild(new ChildEntry(full_name, birth));
                         mFragmentManager.popBackStack();
                     } else {

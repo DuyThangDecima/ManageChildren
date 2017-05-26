@@ -9,10 +9,13 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.thangld.managechildren.R;
+import com.thangld.managechildren.cloud.TransferService;
 import com.thangld.managechildren.cloud.UrlPattern;
 import com.thangld.managechildren.location.AppLocationManager;
+import com.thangld.managechildren.storage.controller.PreferencesController;
 import com.thangld.managechildren.storage.model.ChildModel;
 import com.thangld.managechildren.storage.model.LocationModel;
+import com.thangld.managechildren.utils.NetworkUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +27,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String REQUEST_LOCATION = "request_location";
     private static final String RESPOND_LOCATION = "respond_location";
+
+    private static final String REQUEST_UPDATE_RULE_PARENT = "request_update_rule_parent";
+
     private static final String REQUEST_UPLOAD = "request_upload";
     private static final String TYPE_REQUEST = "type_request";
 
@@ -66,27 +72,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     String city = addresses.get(0).getLocality();
                     String state = addresses.get(0).getAdminArea();
                     String country = addresses.get(0).getCountryName();
-                    if(address != null && address.length() > 0){
+                    if (address != null && address.length() > 0) {
                         addressFull += address;
                     }
-                    if(city != null && city != "null" && city.length() > 0){
-                        if(addressFull != null && addressFull.length()>0 ){
-                            addressFull += ", "+  city;
-                        }else{
+                    if (city != null && city != "null" && city.length() > 0) {
+                        if (addressFull != null && addressFull.length() > 0) {
+                            addressFull += ", " + city;
+                        } else {
                             addressFull += city;
                         }
                     }
-                    if(state != null && state != "null"&& state.length() > 0){
-                        if(addressFull != null && addressFull.length()>0){
-                            addressFull += ", "+  state;
-                        }else{
+                    if (state != null && state != "null" && state.length() > 0) {
+                        if (addressFull != null && addressFull.length() > 0) {
+                            addressFull += ", " + state;
+                        } else {
                             addressFull += state;
                         }
                     }
-                    if(country != null && country != "null" && state.length() > 0){
-                        if(addressFull != null && addressFull.length()>0){
-                            addressFull += ", "+  country;
-                        }else{
+                    if (country != null && country != "null" && state.length() > 0) {
+                        if (addressFull != null && addressFull.length() > 0) {
+                            addressFull += ", " + country;
+                        } else {
                             addressFull += country;
                         }
                     }
@@ -103,6 +109,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 intent.setAction("ACTION_UI");
                 sendBroadcast(intent);
                 LocationModel.LocationHelper.insertLocation(this, ChildModel.QueryHelper.getChildIdActive(this), latLo, longLo, addressFull);
+            } else if (REQUEST_UPDATE_RULE_PARENT.equals(type_request)) {
+                Log.d(TAG, "DOWNLOAD_RULE_PARENT");
+                if(NetworkUtils.isNetworkConnected(mContext)){
+                    TransferService.startActionDownload(mContext, TransferService.DOWNLOAD_RULE_PARENT);
+                }else{
+                    new PreferencesController(mContext).putRequestDownload(true);
+                }
             }
         }
 

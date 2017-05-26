@@ -36,17 +36,17 @@ public class AppAccessibilityService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         final int eventType = event.getEventType();
-        Log.d("mc_log", "onAccessibilityEvent: " + event.getPackageName() + " " + eventType);
+//        Log.d("mc_log", "onAccessibilityEvent: " + event.getPackageName() + " " + eventType);
         switch (eventType) {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                 onWindowStateChanged(event);
                 break;
             case AccessibilityEvent.TYPE_VIEW_CLICKED:
                 onViewClicked(event);
-                Log.d("mc_log", "TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED: " + event.getPackageName());
+//                Log.d("mc_log", "TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED: " + event.getPackageName());
                 break;
             case AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED:
-                Log.d("mc_log", "TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED: " + event.getPackageName());
+//                Log.d("mc_log", "TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED: " + event.getPackageName());
                 break;
         }
     }
@@ -81,11 +81,6 @@ public class AppAccessibilityService extends AccessibilityService {
             } else {
                 isLockRecentTask = false;
             }
-
-            List<CharSequence> characters = event.getText();
-            for (CharSequence charSequence : characters) {
-                Log.d("mc_log", "list: " + charSequence);
-            }
         }
     }
 
@@ -93,9 +88,8 @@ public class AppAccessibilityService extends AccessibilityService {
         String packageName = event.getPackageName().toString();
         String childId = ChildModel.QueryHelper.getChildIdActive(this);
         String typeApp = AppModel.AppHelper.getTypeApp(this, childId, packageName);
-        Log.d("mc_log", "typeApp " + typeApp);
-
-        Log.d("mc_log", "packageNameLock " + packageNameLock);
+//        Log.d("mc_log", "typeApp " + typeApp);
+//        Log.d("mc_log", "packageNameLock " + packageNameLock);
         if (!packageName.equals(packageNameLock)) {
 
             isLock = true;
@@ -123,7 +117,7 @@ public class AppAccessibilityService extends AccessibilityService {
                     return;
                 }
                 startTimeLimitAppUse = System.currentTimeMillis();
-                Log.d("mc_log", "startTimeLimitAppUse " + startTimeLimitAppUse);
+//                Log.d("mc_log", "startTimeLimitAppUse " + startTimeLimitAppUse);
                 long timeUseInDay = new PreferencesController(this).getTimeUseInDay();
                 long limitTimeUse = RuleParentModel.RulesParentHelper.getTimeLimitTimeApp(this, childId) * 60 * 1000;
 
@@ -139,12 +133,12 @@ public class AppAccessibilityService extends AccessibilityService {
                     long extraTime = System.currentTimeMillis() - startTimeLimitAppUse;
                     long timeUseInDay = new PreferencesController(this).getTimeUseInDay();
                     timeUseInDay += extraTime;
-                    Log.d("mc_log", "timeUseInDay " + timeUseInDay);
+//                    Log.d("mc_log", "timeUseInDay " + timeUseInDay);
                     new PreferencesController(this).putTimeUseInDay(timeUseInDay);
                 }
             }
 
-            Log.d("mc_log", "TYPE_WINDOW_STATE_CHANGED: " + event.getPackageName());
+//            Log.d("mc_log", "TYPE_WINDOW_STATE_CHANGED: " + event.getPackageName());
             if (event.getPackageName() != null && event.getClassName() != null) {
                 ComponentName componentName = new ComponentName(
                         event.getPackageName().toString(),

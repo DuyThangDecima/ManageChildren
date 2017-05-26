@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.thangld.managechildren.cloud.TransferService;
 import com.thangld.managechildren.storage.controller.BackupFolder;
 import com.thangld.managechildren.storage.model.AudioModel;
 import com.thangld.managechildren.storage.model.ChildModel;
@@ -126,6 +127,7 @@ public class ImageObserver extends ContentObserver {
                 content.put(ImageModel.Contents.ID_CHILD, childId);
                 mContext.getContentResolver().insert(uriApp, content);
                 VersionUtils.updateVersion(mContext, ContactModel.Contents.TABLE_NAME, childId);
+                TransferService.startActionUpload(mContext, TransferService.UPLOAD_IMAGE);
             }
         } else {
             /**
@@ -134,7 +136,6 @@ public class ImageObserver extends ContentObserver {
             Log.d(TAG, "idMedia <= idApp");
 
         }
-
     }
 
     @Override

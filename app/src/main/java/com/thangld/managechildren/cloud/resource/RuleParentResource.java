@@ -1,15 +1,24 @@
 package com.thangld.managechildren.cloud.resource;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
 
 import com.thangld.managechildren.Constant;
+import com.thangld.managechildren.cloud.HttpConnection;
 import com.thangld.managechildren.cloud.UrlPattern;
+import com.thangld.managechildren.main.parent.RulesFragment;
 import com.thangld.managechildren.storage.controller.PreferencesController;
 import com.thangld.managechildren.storage.model.ChildModel;
+import com.thangld.managechildren.storage.model.ContactModel;
+import com.thangld.managechildren.storage.model.EmailModel;
+import com.thangld.managechildren.storage.model.PhoneModel;
 import com.thangld.managechildren.storage.model.RuleParentModel;
+import com.thangld.managechildren.utils.DeviceInfoUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,6 +46,12 @@ public class RuleParentResource extends JsonResource {
     }
 
     @Override
+    public void onDownloadFinish(String respond) throws JSONException {
+        super.onDownloadFinish(respond);
+        mContext.sendBroadcast(new Intent(RulesFragment.UIBroadcast.ACTION_RULE_PARENT));
+    }
+
+    @Override
     public void upload() {
         Log.d("mc_log", "upload " + this.nameResource);
         // Lay table can update
@@ -58,13 +73,8 @@ public class RuleParentResource extends JsonResource {
 
                 try {
                     JSONObject jsonObject = new JSONObject();
-                    if(new PreferencesController(mContext).getPrivilege() == PreferencesController.PRIVILEGE_PARENT){
-                        jsonObject.put(UrlPattern.PRIVILEGE_KEY, UrlPattern.PRIVILEGE_PARENT);
-                    }else{
-
-                        jsonObject.put(UrlPattern.PRIVILEGE_KEY, UrlPattern.PRIVILEGE_CHILD);
-                    }
-                    jsonObject.put(UrlPattern.CHILD_ID_KEY,ChildModel.QueryHelper.getChildIdActive(mContext));
+                    jsonObject.put(UrlPattern.PRIVILEGE_KEY, new PreferencesController(mContext).getPrivilege());
+                    jsonObject.put(UrlPattern.CHILD_ID_KEY, ChildModel.QueryHelper.getChildIdActive(mContext));
                     for (int i = 0; i < numberCol.length; i++) {
                         if (RuleParentModel.Contents.IS_BACKUP.equals(numberCol[i])) {
                             continue;
@@ -76,26 +86,65 @@ public class RuleParentResource extends JsonResource {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }
 
+
+    // Thực hiện overide lại, không sử dụng parent
     @Override
-    public String download() {
+    public String download()  {
+        PreferencesController preferencesController = new PreferencesController(mContext);
+        String token = preferencesController.getToken();
+
+        String childId = ChildModel.QueryHelper.getChildIdActive(mContext);
+        String deviceId = ChildModel.QueryHelper.getDeviceIdChildActive(mContext);
+        // Nếu không tồn tại token thì không thực hiện gì cả
+        if (token == null || childId == null || deviceId == null) {
+            AccountResource.setLogout(mContext);
+            return "error_2";
+        }
+        String imei = DeviceInfoUtils.getImei(mContext);
+        String deviceName = DeviceInfoUtils.getDeviceName();
 
         HashMap<String, String> hashMap = new HashMap<>();
-        String childId = ChildModel.QueryHelper.getChildIdActive(mContext);
+
+        hashMap.put(UrlPattern.TOKEN_KEY, token);
+        hashMap.put(UrlPattern.IMEI_KEY, imei);
+        hashMap.put(UrlPattern.DEVICE_NAME_KEY, deviceName);
         hashMap.put(UrlPattern.CHILD_ID_KEY, childId);
-        String respond = get(hashMap);
-        try {
-            JSONObject jsonObject = new JSONObject(respond);
-            if (jsonObject.getInt(UrlPattern.STATUS_KEY) == 1) {
-                JSONObject data = jsonObject.getJSONObject(UrlPattern.MSG_KEY);
-                int isSetTimeLimit = data.getInt(RuleParentModel.Contents.IS_SET_TIME_LIMIT_APP);
-                long timeLimitApp = data.getLong(RuleParentModel.Contents.TIME_LIMIT_APP);
-                RuleParentModel.RulesParentHelper.setLimitAppTime(mContext, childId, isSetTimeLimit, timeLimitApp);
+
+        hashMap.put(UrlPattern.PRIVILEGE_KEY, String.valueOf(preferencesController.getPrivilege()));
+
+        String url = UrlPattern.HOST + UrlPattern.API_VERSION + this.nameResource;
+
+        String respondText = HttpConnection.exeGetConnection(url, hashMap);
+
+        if (respondText == null || respondText.length() == 0) {
+        } else {
+            JSONObject jsonRespond = null;
+            try {
+                jsonRespond = new JSONObject(respondText);
+                if (jsonRespond.getInt(UrlPattern.STATUS_KEY) == 1) {
+                    new PreferencesController(mContext).putLatestDownloadContact(System.currentTimeMillis());
+                    // Xóa hết bang email, bang phone, bang number
+                    JSONObject data = jsonRespond.getJSONObject(UrlPattern.MSG_KEY);
+                    int isSetTimeLimit = data.getInt(RuleParentModel.Contents.IS_SET_TIME_LIMIT_APP);
+                    long timeLimitApp = data.getLong(RuleParentModel.Contents.TIME_LIMIT_APP);
+
+                    RuleParentModel.RulesParentHelper.setLimitAppTime(mContext, childId, isSetTimeLimit, timeLimitApp);
+                } else {
+                    String error_id = jsonRespond.getString(UrlPattern.MSG_KEY);
+                    if (error_id.equals(UrlPattern.ERROR_AUTH)) {
+                        AccountResource.setLogout(mContext);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+        }
+        try {
+            onDownloadFinish(respondText);
         } catch (JSONException e) {
             e.printStackTrace();
         }

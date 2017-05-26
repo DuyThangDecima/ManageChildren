@@ -3,6 +3,7 @@ package com.thangld.managechildren.main.parent;
 import android.util.Log;
 
 import com.thangld.managechildren.cloud.TransferService;
+import com.thangld.managechildren.main.PanelActivity;
 import com.thangld.managechildren.storage.controller.DatabaseHelper;
 import com.thangld.managechildren.storage.model.ChildModel;
 import com.thangld.managechildren.storage.model.SmsModel;
@@ -39,6 +40,12 @@ public class SmsFragment extends ListNavContentFragment {
             cursorAdapter.swapCursor(mCursor);
             listViewContainer.setAdapter(cursorAdapter);
         }
+        else{
+//            PanelActivity.GetListChild x = new PanelActivity().GetListChild(getActivity());
+//            x.execute();
+//            setAdapterContent();
+        }
+
     }
 
     @Override

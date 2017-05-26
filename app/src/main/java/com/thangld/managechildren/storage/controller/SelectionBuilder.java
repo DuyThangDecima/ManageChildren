@@ -110,7 +110,6 @@ public class SelectionBuilder {
 
 
     public int update(SQLiteDatabase db, ContentValues values) {
-        assertTable();
         Log.v(TAG, "update() " + this);
         Log.v(TAG, "getSelection() " + getSelection());
         Log.v(TAG, "getSelectionArgs() " + getSelectionArgs());

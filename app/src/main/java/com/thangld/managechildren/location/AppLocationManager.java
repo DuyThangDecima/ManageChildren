@@ -37,9 +37,11 @@ public class AppLocationManager extends Service implements LocationListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        super.onStartCommand(intent, flags, startId);
-        mDeviceId = intent.getAction();
-        getLocationCurrent(mContext);
+        if(intent != null){
+            super.onStartCommand(intent, flags, startId);
+            mDeviceId = intent.getAction();
+            getLocationCurrent(mContext);
+        }
         return START_STICKY;
     }
 

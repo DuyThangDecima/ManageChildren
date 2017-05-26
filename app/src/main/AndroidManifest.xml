@@ -66,11 +66,11 @@
         <activity android:name=".main.child.ListChildActivity" />
         <activity
             android:name=".main.PanelActivity"
-            android:label="@string/title_activity_panel"
+            android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".main.child.PanelParentInChildDeviceActivity"
-            android:label="@string/title_activity_panel"
+            android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <receiver

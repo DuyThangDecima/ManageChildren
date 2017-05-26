@@ -13,6 +13,6 @@ public class BootTimeReceiver extends BroadcastReceiver {
 
         Intent intentService = new Intent(context, ObserverService.class);
         intent.setAction(ObserverService.TYPE_BOOT_TIME);
-        context.startActivity(intentService);
+        context.startService(intentService);
     }
 }

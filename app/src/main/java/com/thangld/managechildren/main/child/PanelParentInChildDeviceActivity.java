@@ -2,6 +2,7 @@ package com.thangld.managechildren.main.child;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -21,8 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.thangld.managechildren.R;
+import com.thangld.managechildren.cloud.resource.AccountResource;
 import com.thangld.managechildren.collector.observer.ObserverService;
 import com.thangld.managechildren.entry.ChildEntry;
+import com.thangld.managechildren.main.account.AccountActivity;
+import com.thangld.managechildren.main.child.deviceadmin.EnableUninstallFragment;
 import com.thangld.managechildren.main.parent.ContactFragment;
 import com.thangld.managechildren.main.parent.RulesFragment;
 import com.thangld.managechildren.main.parent.SmsFragment;
@@ -181,13 +185,22 @@ public class PanelParentInChildDeviceActivity extends AppCompatActivity
         } else if (id == R.id.nav_change_child) {
             fragment = new SmsFragment();
             replaceFragmentInNavContainer(fragment);
-        } else if (id == R.id.nav_uninstall) {
-            replaceFragmentInNavContainer(fragment);
+        }else if (id == R.id.nav_logout) {
+            AccountResource.setLogout(mContext);
+            Intent intent = new Intent(mContext, AccountActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_uninstall) {
+            EnableUninstallFragment.removeAdminActive(mContext);
+            Intent intent = new Intent(Intent.ACTION_DELETE);
+            intent.setData(Uri.parse("package:com.thangld.managechildren"));
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     private void replaceFragmentInNavContainer(Fragment fragment) {
         if (fragment != null) {
@@ -198,6 +211,13 @@ public class PanelParentInChildDeviceActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!EnableUninstallFragment.isAdminActive(mContext)){
+
+        }
+    }
 
     @Override
     public void onClick(View view) {

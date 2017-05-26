@@ -17,6 +17,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -75,9 +76,19 @@ public class PanelActivity extends AppCompatActivity
 
     private View headerNavView;
     private ImageButton redirectionMenu;
+
+    // Tên và icon không được active ở trên góc
     private TextView nameExtra;
+    private ImageView avatarExtra;
+
+    private String childIdExtra;
+
+    // Tên của tài khoản đc active
     private TextView nameActive;
 
+    // Menu item
+    private final int mGroupAccountMenu = 100;
+    private final int mOrderAccountMenu = 1;
 
     private Toolbar toolbar;
     private boolean isMenuListChild;
@@ -87,6 +98,7 @@ public class PanelActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private UIBroadcastReceiver mUiBroadcastReceiver;
 
+
     private ArrayList<ChildEntry> mChildList = new ArrayList<>();
 
     @Override
@@ -95,15 +107,6 @@ public class PanelActivity extends AppCompatActivity
         setContentView(R.layout.activity_panel);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         initViews();
         setListeners();
         mContext = (Activity) this;
@@ -122,11 +125,12 @@ public class PanelActivity extends AppCompatActivity
                 try {
                     // Dong bo tai khoan
 
+                    PreferencesController preferencesController = new PreferencesController(mContext);
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put(UrlPattern.DEVICE_NAME_KEY, DeviceInfoUtils.getDeviceName());
                     jsonObject.put(UrlPattern.IMEI_KEY, DeviceInfoUtils.getImei(mContext));
-                    jsonObject.put(UrlPattern.TOKEN_KEY, new PreferencesController(mContext).getToken());
-                    jsonObject.put(UrlPattern.PRIVILEGE_KEY, UrlPattern.PRIVILEGE_PARENT);
+                    jsonObject.put(UrlPattern.TOKEN_KEY, preferencesController.getToken());
+                    jsonObject.put(UrlPattern.PRIVILEGE_KEY, preferencesController.getPrivilege());
                     AccountResource.syncAccount(jsonObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -157,30 +161,7 @@ public class PanelActivity extends AppCompatActivity
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                ChildEntry child;
-                int countSet = 0;
-                if (mChildList.size() == 0) {
-                    ((ImageView) findViewById(R.id.avatar_active)).setVisibility(View.INVISIBLE);
-                } else if (mChildList.size() == 1) {
-                    child = mChildList.get(0);
-                    nameActive.setText(child.getFullName());
-                } else {
-                    ((ImageView) findViewById(R.id.avatar_extra)).setVisibility(View.VISIBLE);
-                    for (int i = 0; i < mChildList.size(); i++) {
-                        if (countSet >= 2)
-                            break;
-                        child = mChildList.get(i);
-                        if (child.getIsActive() == 1) {
-                            nameActive.setText(child.getFullName());
-                            countSet++;
-                        } else {
-                            nameExtra.setText(child.getFullName());
-                            countSet++;
-                        }
-                    }
-                }
-
-
+                setAccountOnOpenDrawer();
 //                Cursor cursor = mContext.getContentResolver().query(ChildModel.Contents.CONTENT_URI,
 //                        null,
 //                        ChildModel.Contents.ACTIVE + "=?",
@@ -215,6 +196,7 @@ public class PanelActivity extends AppCompatActivity
         redirectionMenu = (ImageButton) headerNavView.findViewById(R.id.redirection_menu);
         nameActive = (TextView) headerNavView.findViewById(R.id.name_active);
         nameExtra = (TextView) headerNavView.findViewById(R.id.name_extra);
+        avatarExtra = (ImageView) headerNavView.findViewById(R.id.avatar_extra);
         isMenuListChild = false;
 
 
@@ -223,8 +205,34 @@ public class PanelActivity extends AppCompatActivity
     private void setListeners() {
         redirectionMenu.setOnClickListener(this);
         navigationView.setNavigationItemSelectedListener(this);
+        avatarExtra.setOnClickListener(this);
     }
 
+    private void setAccountOnOpenDrawer() {
+        ChildEntry child;
+        int countSet = 0;
+        if (mChildList.size() == 0) {
+            avatarExtra.setVisibility(View.INVISIBLE);
+        } else if (mChildList.size() == 1) {
+            child = mChildList.get(0);
+            nameActive.setText(child.getFullName());
+        } else {
+            avatarExtra.setVisibility(View.VISIBLE);
+            for (int i = 0; i < mChildList.size(); i++) {
+                if (countSet >= 2)
+                    break;
+                child = mChildList.get(i);
+                if (child.getIsActive() == 1) {
+                    nameActive.setText(child.getFullName());
+                    countSet++;
+                } else {
+                    childIdExtra = child.getIdServer();
+                    nameExtra.setText(child.getFullName());
+                    countSet++;
+                }
+            }
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -254,7 +262,6 @@ public class PanelActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -266,74 +273,87 @@ public class PanelActivity extends AppCompatActivity
         int id = item.getItemId();
         String device_id = ChildModel.QueryHelper.getDeviceIdChildActive(mContext);
 
-        if (id == R.id.nav_rules) {
-            if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
-                fragment = new NotificationFragment();
-            } else {
-                fragment = new RulesFragment();
-            }
-            replaceFragmentInNavContainer(fragment);
-        } else if (id == R.id.nav_sms) {
-            if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
-                fragment = new NotificationFragment();
-            } else {
-                fragment = new SmsFragment();
-            }
-            replaceFragmentInNavContainer(fragment);
-        } else if (id == R.id.nav_contact) {
-            if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
-                fragment = new NotificationFragment();
-            } else {
-                fragment = new ContactFragment();
-            }
-            replaceFragmentInNavContainer(fragment);
+        if (item.getGroupId() == mGroupAccountMenu) {
+//            nameActive.setText(mChildList.get(item.getItemId()).getFullName());
+            changedChildActive(mContext, mChildList.get(item.getItemId()).getIdServer());
+            setAccountOnOpenDrawer();
 
-        } else if (id == R.id.nav_callog) {
-            if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
-                fragment = new NotificationFragment();
-            } else {
-                fragment = new CallLogFragment();
+            Menu menu = navigationView.getMenu();
+            menu.clear();
+            redirectionMenu.setImageResource(R.drawable.arrow_down);
+            navigationView.inflateMenu(R.menu.activity_panel_drawer);
+            return true;
+
+        } else {
+            if (id == R.id.nav_rules) {
+                if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
+                    fragment = new NotificationFragment();
+                } else {
+                    fragment = new RulesFragment();
+                }
+                replaceFragmentInNavContainer(fragment);
+            } else if (id == R.id.nav_sms) {
+                if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
+                    fragment = new NotificationFragment();
+                } else {
+                    fragment = new SmsFragment();
+                }
+                replaceFragmentInNavContainer(fragment);
+            } else if (id == R.id.nav_contact) {
+                if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
+                    fragment = new NotificationFragment();
+                } else {
+                    fragment = new ContactFragment();
+                }
+                replaceFragmentInNavContainer(fragment);
+
+            } else if (id == R.id.nav_callog) {
+                if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
+                    fragment = new NotificationFragment();
+                } else {
+                    fragment = new CallLogFragment();
+                }
+                replaceFragmentInNavContainer(fragment);
+
+            } else if (id == R.id.nav_location) {
+                if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
+                    fragment = new NotificationFragment();
+                } else {
+                    fragment = new LocationFragment();
+                }
+                replaceFragmentInNavContainer(fragment);
+
+            } else if (id == R.id.nav_photo) {
+                if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
+                    fragment = new NotificationFragment();
+                } else {
+                    fragment = new ImageFragment();
+                }
+                replaceFragmentInNavContainer(fragment);
+
+            } else if (id == R.id.nav_video) {
+                if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
+                    fragment = new NotificationFragment();
+                } else {
+                    fragment = new VideoFragment();
+                }
+                replaceFragmentInNavContainer(fragment);
+
+            } else if (id == R.id.nav_audio) {
+                if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
+                    fragment = new NotificationFragment();
+                } else {
+                    fragment = new AudioFragment();
+                }
+                replaceFragmentInNavContainer(fragment);
+            } else if (id == R.id.nav_logout) {
+                AccountResource.setLogout(mContext);
+                Intent intent = new Intent(mContext, AccountActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.nav_setting) {
+
             }
-            replaceFragmentInNavContainer(fragment);
-
-        } else if (id == R.id.nav_location) {
-            if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
-                fragment = new NotificationFragment();
-            } else {
-                fragment = new LocationFragment();
-            }
-            replaceFragmentInNavContainer(fragment);
-
-        } else if (id == R.id.nav_photo) {
-            if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
-                fragment = new NotificationFragment();
-            } else {
-                fragment = new ImageFragment();
-            }
-            replaceFragmentInNavContainer(fragment);
-
-        } else if (id == R.id.nav_video) {
-            if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
-                fragment = new NotificationFragment();
-            } else {
-                fragment = new VideoFragment();
-            }
-            replaceFragmentInNavContainer(fragment);
-
-        } else if (id == R.id.nav_audio) {
-            if (device_id == null || ChildModel.Contents.NO_LOGIN_BEFORE.equals(device_id)) {
-                fragment = new NotificationFragment();
-            } else {
-                fragment = new AudioFragment();
-            }
-            replaceFragmentInNavContainer(fragment);
-
-        } else if (id == R.id.nav_logout) {
-            AccountResource.setLogout(mContext);
-        } else if (id == R.id.nav_setting) {
-
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -381,15 +401,31 @@ public class PanelActivity extends AppCompatActivity
                 menu.clear();
                 if (isMenuListChild) {
                     redirectionMenu.setImageResource(R.drawable.arrow_up);
-                    for (ChildEntry child : mChildList) {
-                        menu.add(child.getFullName()).setIcon(R.drawable.child_drak_grey);
+                    int idItem;
+                    ChildEntry childEntry;
+                    for (int index = 0; index < mChildList.size(); index++) {
+                        childEntry = mChildList.get(index);
+                        menu.add(mGroupAccountMenu, index, mOrderAccountMenu, childEntry.getFullName()).setIcon(R.drawable.child_drak_grey);
                     }
                 } else {
+
                     redirectionMenu.setImageResource(R.drawable.arrow_down);
                     navigationView.inflateMenu(R.menu.activity_panel_drawer);
                 }
                 break;
+            case R.id.avatar_extra:
+                String fullNameActive = nameActive.getText().toString();
+                String fullNameExtra = nameExtra.getText().toString();
+                nameExtra.setText(fullNameActive);
+                nameActive.setText(fullNameExtra);
+                changedChildActive(mContext, childIdExtra);
+                break;
         }
+    }
+
+    private void changedChildActive(Context context, String childId) {
+        ChildModel.QueryHelper.setChildIdActive(context, childId);
+        refreshListChild();
     }
 
     @Override
@@ -446,7 +482,7 @@ public class PanelActivity extends AppCompatActivity
         }
     }
 
-    private class GetListChild extends AsyncTask<Void, String, String> {
+    public class GetListChild extends AsyncTask<Void, String, String> {
         private Activity mActivity;
         private Dialog dialog;
 
@@ -459,7 +495,7 @@ public class PanelActivity extends AppCompatActivity
             super.onPreExecute();
             if (mChildList.size() <= 0) {
                 // Khi không có đứa trẻ nào thì mới hiển thị
-                //dialog = DialogCustom.showLoadingDialog(mActivity, getString(R.string.performing_data_sync));
+                dialog = DialogCustom.showLoadingDialog(mActivity, getString(R.string.performing_data_sync));
             }
         }
 
@@ -504,6 +540,8 @@ public class PanelActivity extends AppCompatActivity
             if (dialog != null && dialog.isShowing()) {
                 dialog.dismiss();
             }
+            refreshListChild();
+
             if ("error".equals(data)) {
                 DialogCustom.showDialog(mActivity, R.drawable.error, getString(R.string.re_try), getString(R.string.error_try_again));
             } else if ("error_auth".equals(data)) {
@@ -514,15 +552,6 @@ public class PanelActivity extends AppCompatActivity
                 mContext.startActivity(intentLogin);
                 new CustomToast().showToast(mContext, R.drawable.error, getString(R.string.session_expired_login_again));
             }
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    new ImageResource(mContext).download();
-//                    new VideoResource(mContext).download();
-//                    new AudioResource(mContext).download();
-//                }
-//            }).start();
-
         }
 
         private String processErrorPacket(JSONObject jsonData) throws JSONException {
@@ -621,7 +650,6 @@ public class PanelActivity extends AppCompatActivity
             }
             return "success";
         }
-
     }
 
     private void setExtraChildHide() {
@@ -648,7 +676,5 @@ public class PanelActivity extends AppCompatActivity
                 mChildList.add(new ChildEntry(fullName, birth, isActive, idServer));
             } while (cursor.moveToNext());
         }
-
     }
-
 }

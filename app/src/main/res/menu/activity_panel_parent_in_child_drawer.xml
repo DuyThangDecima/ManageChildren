@@ -18,6 +18,11 @@
             android:icon="@drawable/change_child"
             android:title="@string/change_child" />
         <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/logout"
+            android:title="@string/logout" />
+
+        <item
             android:id="@+id/nav_uninstall"
             android:icon="@drawable/uninstall"
             android:title="@string/uninstall" />

@@ -12,8 +12,10 @@ public class UrlPattern {
     /**
      * URL kết nối
      */
-    public static final String HOST = "http://kubernetes-codelab-1378.appspot.com/";
-//    public static final String HOST = "http://192.168.1.15:8080/";
+//    public static final String HOST = "http://kubernetes-codelab-1378.appspot.com/";
+
+
+    public static final String HOST = "http://192.168.1.15:8080/";
     public static final String API_VERSION = "api/v1/";
     public static final String DOWNLOAD = "download";
 
@@ -88,8 +90,7 @@ public class UrlPattern {
     public static final String LAT_LOCATION_KEY = "lat_location";
     public static final String LONG_LOCATION_KEY = "long_location";
 
-    public static final int PRIVILEGE_PARENT = 1;
-    public static final int PRIVILEGE_CHILD = 0;
+
 
 
     public static final String PARAMS_KEY = "param";

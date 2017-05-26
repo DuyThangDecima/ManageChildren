@@ -104,11 +104,12 @@ public abstract class Resource {
             Log.d("mc_log", "Resource-upload: " + array_data.toString());
 
             // Lấy version hiện tại của server
-            String data = new VersionResource(mContext).getVersionServer(nameResource, String.valueOf(UrlPattern.PRIVILEGE_CHILD));
+            String data = new VersionResource(mContext).getVersionServer(nameResource);
             if (data == null) {
                 return;
             }
             JSONObject versionRespond = new JSONObject(data);
+            Log.d("mc_log", "upload() " + this.nameResource + " versionRespond " + versionRespond);
             String versionServer = "";
             if (versionRespond.getInt(UrlPattern.STATUS_KEY) == 1) {
                 versionServer = versionRespond.getString(UrlPattern.MSG_KEY);
@@ -125,7 +126,8 @@ public abstract class Resource {
             versionClient = VersionModel.VersionHelper.getNumberVersion(mContext, childId, table_name);
             Log.d("mc_log", this.nameResource + "onUpload() versionClient-" + versionClient);
             // Chỉ thực hiện upload khi version client lớn hơn versin server
-            if (VersionUtils.compareVersion(versionClient, versionServer) > 0) {
+            // XXX Thang app luon upload khi co thay doi.
+            if (VersionUtils.compareVersion(versionClient, versionServer) > 0 || this.nameResource.equals(AppResource.NAME_RESOURCE)) {
                 JSONObject dataUpload = new JSONObject();
                 dataUpload.put(UrlPattern.DATA_KEY, array_data);
                 dataUpload.put(UrlPattern.VERSION_KEY, versionClient);
@@ -145,18 +147,22 @@ public abstract class Resource {
         }
     }
 
+
     public abstract void onUploadFinish(String respond) throws JSONException;
+
+    public abstract void onDownloadFinish(String respond) throws JSONException;
 
     /**
      * Thực hiện check version,
      * download khi version client bé hơn client server
      */
     public String download() {
+        Log.d("mc_log", "download " + this.nameResource);
         String respond = null;
         try {
             // Lấy version hiện tại của server
             String data = null;
-            data = new VersionResource(mContext).getVersionServer(nameResource, String.valueOf(UrlPattern.PRIVILEGE_PARENT));
+            data = new VersionResource(mContext).getVersionServer(nameResource);
             if (data == null) {
                 // Do ko co child_id
                 return null;
@@ -185,7 +191,7 @@ public abstract class Resource {
             Log.d("mc_log", "versionClient " + versionClient);
 
             // Chỉ thực hiện download khi version client bé hơn versin server
-            if (VersionUtils.compareVersion(versionClient, versionServer) < 0) {
+            if (VersionUtils.compareVersion(versionClient, versionServer) < 0 || this.nameResource.equals(AppResource.NAME_RESOURCE)) {
                 Log.d("mc_log", "compareVersion versionServer > versionClient");
 
                 // Thực hiện upload
@@ -210,7 +216,9 @@ public abstract class Resource {
                 dataUpload.put(UrlPattern.DATA_KEY, ids);
                 dataUpload.put(UrlPattern.VERSION_KEY, versionClient);
                 // Xử lý ở exeDownload tất cả liên quan đến tất cả
-                return exeDownload(dataUpload);
+                String resDownload = exeDownload(dataUpload);
+                onDownloadFinish(resDownload);
+
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();

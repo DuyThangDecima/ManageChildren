@@ -54,7 +54,7 @@ public class SyncAccountTask extends AsyncTask<Void, String, String> {
             jsonObject.put(UrlPattern.TOKEN_KEY, new PreferencesController(mActivity).getToken());
 
             jsonObject.put(UrlPattern.CHILD_ID_KEY, ChildModel.QueryHelper.getChildIdActive(mActivity));
-            jsonObject.put(UrlPattern.PRIVILEGE_KEY, UrlPattern.PRIVILEGE_CHILD);
+            jsonObject.put(UrlPattern.PRIVILEGE_KEY, new PreferencesController(mActivity).getPrivilege());
             respond = AccountResource.syncAccount(jsonObject);
 
             // Gui token len

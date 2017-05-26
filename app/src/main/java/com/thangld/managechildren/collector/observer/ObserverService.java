@@ -2,8 +2,10 @@ package com.thangld.managechildren.collector.observer;
 
 import android.app.Service;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
@@ -11,9 +13,11 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.thangld.managechildren.Constant;
 import com.thangld.managechildren.Debug;
 import com.thangld.managechildren.cloud.TransferService;
 import com.thangld.managechildren.cloud.resource.ContactResource;
+import com.thangld.managechildren.cloud.resource.RuleParentResource;
 import com.thangld.managechildren.collector.reader.AppReader;
 import com.thangld.managechildren.collector.reader.AudioReader;
 import com.thangld.managechildren.collector.reader.CallLogReader;
@@ -21,6 +25,8 @@ import com.thangld.managechildren.collector.reader.ImageReader;
 import com.thangld.managechildren.collector.reader.SmsReader;
 import com.thangld.managechildren.collector.reader.VideoReader;
 import com.thangld.managechildren.storage.controller.PreferencesController;
+import com.thangld.managechildren.storage.model.ChildModel;
+import com.thangld.managechildren.storage.model.RuleParentModel;
 import com.thangld.managechildren.utils.NetworkUtils;
 
 public class ObserverService extends Service {
@@ -62,8 +68,8 @@ public class ObserverService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        if(intent != null){
-            String action  = intent.getAction();
+        if (intent != null) {
+            String action = intent.getAction();
             if (TYPE_BOOT_TIME.equals(action)) {
 
             } else if (TYPE_CHILD_ENABLE_FIRST.equals(action)) {
@@ -95,6 +101,34 @@ public class ObserverService extends Service {
         //
         AppReader appReader = new AppReader(this);
         appReader.execute();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String childId = ChildModel.QueryHelper.getChildIdActive(mContext);
+                Cursor cursor = mContext.getContentResolver().query(
+                        RuleParentModel.Contents.CONTENT_URI,
+                        null,
+                        RuleParentModel.Contents.ID_CHILD + " = ?",
+                        new String[]{childId},
+                        null
+                );
+                if (cursor != null && cursor.getCount() > 0) {
+                } else {
+                    // Tự động set rule
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(RuleParentModel.Contents.ID_CHILD, childId);
+                    contentValues.put(RuleParentModel.Contents.IS_SET_TIME_LIMIT_APP, 1);
+                    contentValues.put(RuleParentModel.Contents.TIME_LIMIT_APP, 120);
+                    contentValues.put(RuleParentModel.Contents.IS_BACKUP, Constant.BACKUP_FALSE);
+                    mContext.getContentResolver().insert(
+                            RuleParentModel.Contents.CONTENT_URI,
+                            contentValues
+                    );
+                }
+                new RuleParentResource(mContext).upload();
+            }
+        }).start();
 
         Log.d("mc_log", "readInStorage");
         // 0
@@ -132,6 +166,8 @@ public class ObserverService extends Service {
                 new ContactResource(mContext).upload();
             }
         }).start();       // Upload
+
+
 
         Log.d("mc_log", "end readInStorage()");
 

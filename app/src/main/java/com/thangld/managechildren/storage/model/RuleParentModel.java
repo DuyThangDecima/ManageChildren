@@ -132,17 +132,36 @@ public class RuleParentModel {
         }
 
         public static void setLimitAppTime(Context context, String childId, int isSetLimitTime, long time) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(Contents.IS_SET_TIME_LIMIT_APP, isSetLimitTime);
-            contentValues.put(Contents.TIME_LIMIT_APP, time);
-            contentValues.put(Contents.IS_BACKUP, Constant.BACKUP_FALSE);
-            context.getContentResolver().update(Contents.CONTENT_URI,
-                    contentValues,
+            Cursor cursor = context.getContentResolver().query(
+                    Contents.CONTENT_URI,
+                    null,
                     Contents.ID_CHILD + " = ?",
-                    new String[]{childId}
-                    );
-            return;
+                    new String[]{childId},
+                    null
+            );
+            if (cursor != null && cursor.getCount() > 0) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(Contents.IS_SET_TIME_LIMIT_APP, isSetLimitTime);
+                contentValues.put(Contents.TIME_LIMIT_APP, time);
+                contentValues.put(Contents.IS_BACKUP, Constant.BACKUP_FALSE);
 
+                context.getContentResolver().update(Contents.CONTENT_URI,
+                        contentValues,
+                        Contents.ID_CHILD + " = ?",
+                        new String[]{childId}
+                );
+            } else {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(Contents.ID_CHILD, childId);
+                contentValues.put(Contents.IS_SET_TIME_LIMIT_APP, isSetLimitTime);
+                contentValues.put(Contents.TIME_LIMIT_APP, time);
+                contentValues.put(Contents.IS_BACKUP, Constant.BACKUP_FALSE);
+                context.getContentResolver().insert(
+                        Contents.CONTENT_URI,
+                        contentValues
+                );
+            }
+            return;
         }
 
     }

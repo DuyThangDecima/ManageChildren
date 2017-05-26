@@ -41,6 +41,11 @@ public class FileResource extends Resource implements MethodFileResource {
 
     }
 
+    @Override
+    public void onDownloadFinish(String respond) throws JSONException {
+
+    }
+
     public FileResource() {
 
     }

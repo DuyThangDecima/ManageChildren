@@ -128,9 +128,6 @@ public class AppModel {
                     null
             );
             if (cursor != null && cursor.getCount() > 0) {
-                Log.d("mc_log", "getTypeApp packageName " + packageName);
-                Log.d("mc_log", "getTypeApp childId " + childId);
-                Log.d("mc_log", "getTypeApp cursor.getCount() " + cursor.getCount());
                 cursor.moveToFirst();
                 return cursor.getString(cursor.getColumnIndex(Contents.TYPE));
             } else {

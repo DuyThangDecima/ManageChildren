@@ -1,6 +1,7 @@
 package com.thangld.managechildren.cloud.resource;
 
 import android.content.ContentValues;
+import android.util.Log;
 
 import com.thangld.managechildren.Constant;
 import com.thangld.managechildren.cloud.HttpConnection;
@@ -38,6 +39,11 @@ public class JsonResource extends Resource implements MethodJsonResource {
     }
 
     @Override
+    public void onDownloadFinish(String respond) throws JSONException {
+
+    }
+
+    @Override
     public String exeUpload(JSONObject jsonData) throws JSONException {
         String respond = post(jsonData);
         onUploadFinish(respond);
@@ -53,9 +59,16 @@ public class JsonResource extends Resource implements MethodJsonResource {
         String childId = ChildModel.QueryHelper.getChildIdActive(mContext);
         String deviceId = ChildModel.QueryHelper.getDeviceIdChildActive(mContext);
         // Nếu không tồn tại token thì không thực hiện gì cả
-        if (token == null || childId == null || deviceId == null) {
+        int privilege = preferencesController.getPrivilege();
+        if (token == null || childId == null) {
             AccountResource.setLogout(mContext);
             return "error_2";
+        }
+        if(privilege == PreferencesController.PRIVILEGE_PARENT){
+            if (deviceId == null) {
+                AccountResource.setLogout(mContext);
+                return "error_2";
+            }
         }
         String imei = DeviceInfoUtils.getImei(mContext);
         String deviceName = DeviceInfoUtils.getDeviceName();
@@ -66,12 +79,12 @@ public class JsonResource extends Resource implements MethodJsonResource {
         dataUpload.put(UrlPattern.IMEI_KEY, imei);
         dataUpload.put(UrlPattern.DEVICE_NAME_KEY, deviceName);
         dataUpload.put(UrlPattern.CHILD_ID_KEY, childId);
-        dataUpload.put(UrlPattern.DEVICE_ID_KEY, deviceId);
-
+        if(privilege == PreferencesController.PRIVILEGE_PARENT){
+            dataUpload.put(UrlPattern.DEVICE_ID_KEY, deviceId);
+        }
         String url = UrlPattern.HOST + UrlPattern.API_VERSION + UrlPattern.DOWNLOAD + "/" + this.nameResource;
-
         String respondText = HttpConnection.exePostConnection(new URL(url), dataUpload);
-
+        Log.d("mc_log","download " + this.nameResource + " " + respondText);
         if (respondText == null || respondText.length() == 0) {
 
         } else {
@@ -95,7 +108,6 @@ public class JsonResource extends Resource implements MethodJsonResource {
                         Iterator<?> keys = item.keys();
                         while (keys.hasNext()) {
                             String key = (String) keys.next();
-                            // TODO check item.get(key).toString()
                             contentValues.put(key, item.get(key).toString());
                         }
                         mContext.getContentResolver().insert(uri, contentValues);
@@ -104,11 +116,12 @@ public class JsonResource extends Resource implements MethodJsonResource {
                         Iterator<?> keys = item.keys();
                         while (keys.hasNext()) {
                             String key = (String) keys.next();
-                            // TODO check item.get(key).toString()
                             contentValues.put(key, item.get(key).toString());
                         }
-                        mContext.getContentResolver().insert(uri, contentValues);
-                        mContext.getContentResolver().update(uri, contentValues, "id_server = ?", new String[]{item.getString("id_server")});
+                        Log.d("mc_log","id_server: " + item.getString("id_server"));
+
+                        int result = mContext.getContentResolver().update(uri, contentValues, "id_server = ?", new String[]{item.getString("id_server")});
+                        Log.d("mc_log","result: " + result);
 
                     } else if (UrlPattern.ACTION_DELETE.equals(action)) {
                         mContext.getContentResolver().delete(uri, "id_server = ?", new String[]{item.getString("id_server")});

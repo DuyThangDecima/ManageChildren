@@ -1,6 +1,7 @@
 package com.thangld.managechildren.cloud.resource;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.thangld.managechildren.cloud.HttpConnection;
 import com.thangld.managechildren.cloud.UrlPattern;
@@ -26,6 +27,7 @@ public class AccountResource {
      * @param context
      */
     public static void setLogout(Context context) {
+        Log.d("mc_log","setLogout" + context.getClass());
         // Xóa token
         PreferencesController preferences = new PreferencesController(context);
         preferences.remove(PreferencesController.TOKEN_KEY);

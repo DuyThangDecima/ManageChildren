@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,8 +54,6 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         // Inflate the layout for this fragment
         mActivity = getActivity();
         view = inflater.inflate(R.layout.fragment_location, container, false);
@@ -144,7 +143,6 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         mActivity.unregisterReceiver(uiBroadcastReceiver);
-
     }
 
     public class UIBroadcastReceiver extends BroadcastReceiver {
@@ -244,6 +242,7 @@ public class LocationFragment extends Fragment implements View.OnClickListener {
             TextView title = (TextView) view.findViewById(R.id.title);
             ImageView imageView = (ImageView) view.findViewById(R.id.icon);
             imageView.setImageResource(R.drawable.location);
+            imageView.setColorFilter(ContextCompat.getColor(context,R.color.background_color));
             // Extract properties from cursor
             long date = cursor.getLong(cursor.getColumnIndexOrThrow(LocationModel.Contents.DATE));
 

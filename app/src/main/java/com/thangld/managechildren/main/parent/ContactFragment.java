@@ -47,9 +47,15 @@ public class ContactFragment extends ListNavContentFragment {
     @Override
     protected void checkOnline() {
         // TODO KHông phải khi nào vào cũng check online như thế này
+
+        Cursor cursor = mContext.getContentResolver().query(ContactModel.Contents.CONTENT_URI,null,null,null,null);
+        boolean isEmpty = false;
+        if( cursor != null && cursor.getCount() <= 0){
+            isEmpty = true;
+        }
         PreferencesController preferencesController = new PreferencesController(mContext);
         long lastest = preferencesController.getLatestDownloadContact();
-        if (System.currentTimeMillis() - lastest > 7 * 24 * 60 *1000){
+        if (System.currentTimeMillis() - lastest > 7 * 24 * 60 *1000 || isEmpty){
             if (NetworkUtils.isNetworkConnected(mContext)) {
                 TransferService.startActionDownload(mContext, TransferService.DOWNLOAD_CONTACT);
             } else {

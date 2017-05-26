@@ -3,6 +3,8 @@ package com.thangld.managechildren.storage.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.thangld.managechildren.cloud.UrlPattern;
+
 /**
  * Created by thangld on 09/04/2017.
  */
@@ -39,9 +41,9 @@ public class PreferencesController {
      *
      */
     public static final String PRIVILEGE_KEY = "privilege";
-    public static final String PRIVILEGE_PARENT = "privilege_parent";
-    public static final String PRIVILEGE_CHILD = "privilege_child";
-    public static final String PRIVILEGE_UNKNOWN = "privilege_unknown";
+    public static final int PRIVILEGE_PARENT = 1;
+    public static final int PRIVILEGE_CHILD = 0;
+    public static final int PRIVILEGE_UNKNOWN = -1;
 
     public static final String IMEI_KEY = "imei";
     public static final String DEVICE_NAME_KEY = "device_name";
@@ -58,6 +60,8 @@ public class PreferencesController {
 
     public static final String PASSWORD_CHILD = "password_child";
 
+    public static final String REQUEST_UPLOAD = "request_upload";
+    public static final String REQUEST_DOWNLOAD = "request_download";
 
     public PreferencesController(Context context) {
         this.context = context;
@@ -112,12 +116,12 @@ public class PreferencesController {
      *
      * @param privilege
      */
-    public void putPrivilege(String privilege) {
-        sharedPreferences.edit().putString(PRIVILEGE_KEY, privilege).commit();
+    public void putPrivilege(int privilege) {
+        sharedPreferences.edit().putInt(PRIVILEGE_KEY, privilege).commit();
     }
 
-    public String getPrivilege() {
-        return sharedPreferences.getString(PRIVILEGE_KEY, PRIVILEGE_UNKNOWN);
+    public int getPrivilege() {
+        return sharedPreferences.getInt(PRIVILEGE_KEY, PRIVILEGE_UNKNOWN);
     }
 
     /**
@@ -195,5 +199,20 @@ public class PreferencesController {
         return sharedPreferences.getLong(LATEST_DOWNLOAD_CONTACT_KEY, 0);
     }
 
+    public void putRequestUpload(boolean value) {
+        sharedPreferences.edit().putBoolean(REQUEST_UPLOAD, value).commit();
+    }
+
+    public boolean getRequestUpload() {
+        return sharedPreferences.getBoolean(REQUEST_UPLOAD, true);
+    }
+
+    public void putRequestDownload(boolean value) {
+        sharedPreferences.edit().putBoolean(REQUEST_DOWNLOAD, value).commit();
+    }
+
+    public boolean getRequestDownload() {
+        return sharedPreferences.getBoolean(REQUEST_DOWNLOAD, true);
+    }
 
 }

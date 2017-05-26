@@ -5,6 +5,7 @@
     <string name="passowrd">Mật khẩu</string>
     <string name="passowrd_incorrect">Mật khẩu dkhông đúng</string>
     <string name="login">ĐĂNG NHẬP</string>
+    <string name="login_title">Đăng nhập</string>
     <string name="login_nomarl">Đăng nhập</string>
     <string name="forgot">Quên mật khẩu?</string>
     <string name="newUser">Chưa có tài khoản? Đăng ký tại đây.</string>

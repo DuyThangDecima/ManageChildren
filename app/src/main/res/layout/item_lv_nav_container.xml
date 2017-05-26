@@ -10,7 +10,6 @@
         android:layout_height="72dp"
         android:layout_centerVertical="true"
         android:padding="16dp"
-        android:tint="@color/background_color"
         android:src="@drawable/child" />
 
     <CheckBox

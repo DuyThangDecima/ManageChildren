@@ -139,4 +139,10 @@ public class EnableUninstallFragment extends Fragment implements View.OnClickLis
         ComponentName mAdminName = new ComponentName(context, AppDeviceAdminReceiver.class);
         return mDPM.isAdminActive(mAdminName);
     }
+
+    public static void removeAdminActive(Context context){
+        ComponentName devAdminReceiver = new ComponentName(context, AppDeviceAdminReceiver.class);
+        DevicePolicyManager dpm = (DevicePolicyManager)context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        dpm.removeActiveAdmin(devAdminReceiver);
+    }
 }

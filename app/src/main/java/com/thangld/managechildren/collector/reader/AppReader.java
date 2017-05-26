@@ -56,7 +56,6 @@ public class AppReader extends AbstractReader {
 
                 contentValues.put(AppModel.Contents.APP_NAME, appName);
                 contentValues.put(AppModel.Contents.TYPE, AppModel.Contents.TYPE_NORMAL_APP);
-                contentValues.put(AppModel.Contents.REMOVED, 1);
                 contentValues.put(AppModel.Contents.IS_BACKUP, Constant.BACKUP_FALSE);
                 contentValues.put(AppModel.Contents.ID_CHILD, mChildId);
 
@@ -70,8 +69,10 @@ public class AppReader extends AbstractReader {
                 } else {
                     batch.add(ContentProviderOperation.
                             newUpdate(AppModel.Contents.CONTENT_URI).
-                            withSelection(AppModel.Contents.PACKAGENAME , new String[]{packagename}).
-                            withValues(contentValues).
+                            withSelection(AppModel.Contents.PACKAGENAME + " = ?" , new String[]{packagename}).
+                            withValue(AppModel.Contents.TYPE, AppModel.Contents.TYPE_NORMAL_APP).
+                            withValue(AppModel.Contents.IS_BACKUP, Constant.BACKUP_FALSE).
+                            withValue(AppModel.Contents.ID_CHILD, mChildId).
                             build());
                 }
             }

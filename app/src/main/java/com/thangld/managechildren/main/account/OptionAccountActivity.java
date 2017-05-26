@@ -81,8 +81,10 @@ public class OptionAccountActivity extends AppCompatActivity implements View.OnC
                 break;
             case R.id.continueBtn:
                 if (belongChild.isChecked()) {
+                    PreferencesController preferencesController = new PreferencesController(this);
+                    preferencesController.putPrivilege(PreferencesController.PRIVILEGE_CHILD);
                     // Kiểm tra đã tạo mật khẩu chưa
-                    String passwordChild = new PreferencesController(this).getPasswordChild();
+                    String passwordChild = preferencesController.getPasswordChild();
                     Log.d("mc_log", "passwordChild " + passwordChild);
                     if (passwordChild == null || passwordChild.length() == 0) {
                         // passwordChild == null nghĩa là chưa tạo password bào giờ
@@ -96,6 +98,8 @@ public class OptionAccountActivity extends AppCompatActivity implements View.OnC
                         startActivity(intent);
                     }
                 } else if (belongParent.isChecked()) {
+                    PreferencesController preferencesController = new PreferencesController(this);
+                    preferencesController.putPrivilege(PreferencesController.PRIVILEGE_PARENT);
                     Intent intent = new Intent(this, PanelActivity.class);
                     startActivity(intent);
                 }
